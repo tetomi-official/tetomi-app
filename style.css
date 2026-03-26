@@ -1,766 +1,842 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>マイページ | TETOMI</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="css/style.css" />
-  <style>
-    .mypage-page { background: var(--bg-gray); min-height: 100vh; }
+/* ===================================================
+   TETOMI — Design System
+   Based on: tetomi-for-glomac.studio.site
+   Primary  : #14314A (Dark Navy)
+   Accent   : #FF5035 (Coral Red)
+   BG Light : #E6E7E9 / #FAFAFA
+   Font     : Raleway + Noto Sans JP
+   =================================================== */
 
-    /* ── PROFILE EDIT FORM ── */
-    .profile-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800;1,900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap');
 
-    /* ── LISTING MANAGE ITEM ── */
-    .listing-manage-item {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 16px; background: var(--white); border-radius: var(--r-lg);
-      border: 1px solid var(--border-light); margin-bottom: 12px;
-      transition: box-shadow 0.2s;
-    }
-    .listing-manage-item:hover { box-shadow: var(--shadow-sm); }
-    .lm-thumb {
-      width: 68px; height: 68px; flex-shrink: 0; border-radius: var(--r);
-      background: linear-gradient(135deg, #d8dfe5 0%, #e6e9ec 100%);
-      display: flex; align-items: center; justify-content: center; font-size: 2rem;
-      overflow: hidden; cursor: pointer;
-    }
-    .lm-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .lm-info { flex: 1; min-width: 0; }
-    .lm-title {
-      font-size: 14px; font-weight: 700; color: var(--navy);
-      margin-bottom: 4px; cursor: pointer;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .lm-title:hover { color: var(--coral); }
-    .lm-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
-    .lm-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-    .btn-xs {
-      padding: 5px 14px; border-radius: var(--r-sm); font-size: 11px; font-weight: 700;
-      transition: all 0.2s; font-family: var(--font-en); display: inline-flex; align-items: center; gap: 5px;
-    }
-    .btn-xs-outline { border: 1.5px solid var(--navy); color: var(--navy); background: transparent; }
-    .btn-xs-outline:hover { background: var(--navy); color: var(--white); }
-    .btn-xs-danger { border: 1.5px solid #ef4444; color: #ef4444; background: transparent; }
-    .btn-xs-danger:hover { background: #ef4444; color: var(--white); }
-    .btn-xs-navy { background: var(--navy); color: var(--white); border: none; }
-    .btn-xs-navy:hover { background: var(--navy-dark); }
-    .btn-xs-coral { background: var(--coral); color: var(--white); border: none; }
-    .btn-xs-coral:hover { background: var(--coral-hover); }
-    .btn-xs-green { background: #10b981; color: var(--white); border: none; }
-    .btn-xs-green:hover { background: #059669; }
-    .btn-xs-gray { background: var(--border); color: var(--text-muted); border: none; }
-    .lm-price {
-      font-family: var(--font-en); font-size: 1.1rem; font-weight: 900; color: var(--navy);
-      flex-shrink: 0; padding-top: 4px;
-    }
+:root {
+  /* Brand Colors */
+  --navy:        #14314A;
+  --navy-mid:    #1c3f5c;
+  --navy-light:  #1e4a6e;
+  --navy-dark:   #0d2035;
+  --coral:       #FF5035;
+  --coral-hover: #e03d25;
+  --white:       #ffffff;
+  --off-white:   #fafafa;
+  --bg-gray:     #E6E7E9;
+  --bg-light:    #f4f5f6;
+  --text-dark:   #14314A;
+  --text-mid:    #3d5a6e;
+  --text-muted:  #7a93a5;
+  --border:      #d0d5d9;
+  --border-light:#e8eaec;
 
-    /* ── RESERVATION CARD ── */
-    .res-card {
-      background: var(--white); border-radius: var(--r-lg); padding: 18px 20px;
-      border: 1px solid var(--border-light); margin-bottom: 12px;
-      display: flex; gap: 14px; align-items: flex-start;
-      transition: box-shadow 0.2s;
-    }
-    .res-card:hover { box-shadow: var(--shadow-sm); }
-    .res-card-thumb {
-      width: 56px; height: 56px; flex-shrink: 0; border-radius: var(--r-sm);
-      background: var(--bg-gray); display: flex; align-items: center;
-      justify-content: center; font-size: 1.5rem;
-    }
-    .res-card-body { flex: 1; }
-    .res-card-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-    .res-card-meta { font-size: 12px; color: var(--text-muted); line-height: 1.7; }
-    .res-card-actions { flex-shrink: 0; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+  /* Shadows */
+  --shadow-sm:  0 2px 8px rgba(20,49,74,0.08);
+  --shadow:     0 4px 20px rgba(20,49,74,0.12);
+  --shadow-lg:  0 8px 40px rgba(20,49,74,0.18);
+  --shadow-xl:  0 20px 60px rgba(20,49,74,0.22);
 
-    /* ── MOBILE NAV ── */
-    @media (max-width: 1024px) {
-      .profile-form .form-row { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 480px) {
-      .lm-actions { flex-direction: column; align-items: flex-start; }
-      .lm-price { font-size: 1rem; }
-    }
-  </style>
-</head>
-<body class="mypage-page">
+  /* Radius */
+  --r-xs:   4px;
+  --r-sm:   6px;
+  --r:      8px;
+  --r-lg:   12px;
+  --r-xl:   16px;
+  --r-2xl:  24px;
+  --r-full: 9999px;
 
-<!-- SIDE TABS -->
-<div class="side-tab" aria-hidden="true">
-  <a href="sell.html">出品する</a>
-  <a href="listings.html">教科書を探す</a>
-</div>
+  /* Typography */
+  --font-en:  'Raleway', 'Noto Sans JP', sans-serif;
+  --font-ja:  'Noto Sans JP', sans-serif;
 
-<!-- NAVBAR -->
-<nav class="navbar scrolled" id="navbar">
-  <div class="nav-container">
-    <a href="index.html" class="nav-logo" aria-label="TETOMI Home">
-      <img src="images/tetomi-logo.webp" alt="TETOMI" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
-      <div class="nav-logo-text" style="display:none;">
-        <span class="logo-main">TETOMI</span>
-        <span class="logo-sub">手から手へ、教科書とつながりを</span>
-      </div>
-    </a>
-    <div class="nav-links" id="navLinks">
-      <a href="index.html" class="nav-link-item">
-        <span class="link-en">Home</span>
-        <span class="link-ja">トップ</span>
-      </a>
-      <a href="listings.html" class="nav-link-item">
-        <span class="link-en">Books</span>
-        <span class="link-ja">教科書一覧</span>
-      </a>
-      <button class="btn-login-nav" id="navLoginBtn" onclick="openModal('loginModal')">ログイン</button>
-      <a href="sell.html" class="nav-cta">
-        <i class="fas fa-plus"></i> 出品する
-      </a>
-      <a href="mypage.html" class="nav-user-badge hidden" id="navAvatar">
-        <i class="fas fa-user-circle"></i>
-        <span id="navUserName"></span>
-      </a>
-    </div>
-    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="メニュー">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
+  /* Layout */
+  --nav-h:    72px;
+  --max-w:   1280px;
+}
 
-<!-- PAGE HEADER -->
-<div class="page-header">
-  <div class="page-header-inner">
-    <div class="breadcrumb">
-      <a href="index.html">Home</a>
-      <i class="fas fa-chevron-right" style="font-size:9px;"></i>
-      <span>マイページ</span>
-    </div>
-    <h1>マイページ</h1>
-    <p id="mpHeaderSub">— ログインしてください —</p>
-  </div>
-</div>
+/* ===================================================
+   RESET
+   =================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font-en);
+  background: var(--white);
+  color: var(--text-dark);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; border: none; background: none; font-family: var(--font-en); }
+input, select, textarea { font-family: var(--font-en); }
+ul, ol { list-style: none; }
+.hidden { display: none !important; }
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 40px; }
 
-<!-- MAIN -->
-<main class="page-main" style="background:var(--bg-gray);">
-  <div class="container">
+/* ===================================================
+   SCROLLBAR
+   =================================================== */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-gray); }
+::-webkit-scrollbar-thumb { background: var(--navy); border-radius: 3px; }
 
-    <!-- NOT LOGGED IN -->
-    <div id="notLoggedIn" class="hidden">
-      <div class="panel-card">
-        <div class="panel-body" style="text-align:center;padding:56px 32px;">
-          <div style="font-size:3rem;margin-bottom:16px;">🔐</div>
-          <h3 style="font-size:1.3rem;font-weight:800;color:var(--navy);margin-bottom:12px;">ログインが必要です</h3>
-          <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px;">マイページを利用するにはログインしてください。</p>
-          <button onclick="openModal('loginModal')" class="btn-navy">
-            <i class="fas fa-sign-in-alt"></i> ログイン / 登録
-          </button>
-        </div>
-      </div>
-    </div>
+/* ===================================================
+   SIDE CTA TABS (right edge, vertical)
+   =================================================== */
+.side-tab {
+  position: fixed;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.side-tab a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--navy);
+  color: var(--white);
+  width: 52px;
+  padding: 22px 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  writing-mode: vertical-rl;
+  transition: background 0.25s, width 0.25s;
+  box-shadow: -4px 0 18px rgba(20,49,74,0.25);
+}
+.side-tab a:hover { background: var(--coral); }
+.side-tab a + a { border-top: 1px solid rgba(255,255,255,0.15); }
 
-    <!-- LOGGED IN -->
-    <div id="mypageContent" class="hidden">
-      <div class="mypage-layout">
+/* ===================================================
+   NAVBAR
+   =================================================== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  height: var(--nav-h);
+  background: rgba(20,49,74,0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  transition: all 0.3s;
+}
+.navbar.scrolled {
+  background: var(--navy);
+  box-shadow: 0 4px 32px rgba(20,49,74,0.4);
+}
+.nav-container {
+  max-width: var(--max-w); margin: 0 auto;
+  height: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px;
+}
+/* Logo */
+.nav-logo {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none;
+}
+.nav-logo img {
+  height: 38px; width: auto; object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+.nav-logo-text {
+  display: flex; flex-direction: column;
+}
+.nav-logo-text .logo-main {
+  font-family: var(--font-en);
+  font-size: 1.4rem; font-weight: 900; color: var(--white);
+  letter-spacing: 0.14em; line-height: 1;
+}
+.nav-logo-text .logo-sub {
+  font-size: 9px; color: rgba(255,255,255,0.5);
+  letter-spacing: 0.14em; margin-top: 3px;
+}
 
-        <!-- SIDEBAR -->
-        <aside class="mypage-sidebar">
-          <div class="sidebar-profile">
-            <div class="sidebar-avatar" id="sidebarAvatar">?</div>
-            <div class="sidebar-name" id="sidebarName">—</div>
-            <div class="sidebar-univ" id="sidebarUniv"></div>
-            <div class="sidebar-rating">
-              <i class="fas fa-star"></i>
-              <span id="sidebarRating">5.0</span>
-            </div>
-          </div>
-          <nav class="sidebar-nav">
-            <div class="sidebar-nav-item active" onclick="switchTab('dashboard')" id="tabDashboard">
-              <i class="fas fa-chart-bar"></i> ダッシュボード
-            </div>
-            <div class="sidebar-nav-item" onclick="switchTab('myListings')" id="tabMyListings">
-              <i class="fas fa-book"></i> 出品中の教科書
-              <span class="pending-dot hidden" id="listingsBadge">0</span>
-            </div>
-            <div class="sidebar-nav-item" onclick="switchTab('sentRes')" id="tabSentRes">
-              <i class="fas fa-paper-plane"></i> 送った購入希望
-              <span class="pending-dot hidden" id="sentResBadge">0</span>
-            </div>
-            <div class="sidebar-nav-item" onclick="switchTab('receivedRes')" id="tabReceivedRes">
-              <i class="fas fa-inbox"></i> 受け取った購入希望
-              <span class="pending-dot hidden" id="receivedResBadge">0</span>
-            </div>
-            <div class="sidebar-nav-item" onclick="switchTab('profile')" id="tabProfile">
-              <i class="fas fa-user-cog"></i> プロフィール編集
-            </div>
-            <div class="sidebar-nav-item danger" onclick="handleLogout()">
-              <i class="fas fa-sign-out-alt"></i> ログアウト
-            </div>
-          </nav>
-        </aside>
+/* Nav Links */
+.nav-links {
+  display: flex; align-items: center; gap: 0;
+}
+.nav-link-item {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 8px 16px; position: relative; cursor: pointer;
+  transition: opacity 0.2s; text-decoration: none;
+}
+.nav-link-item .link-en {
+  font-size: 13px; font-weight: 600; color: var(--white);
+  letter-spacing: 0.04em; line-height: 1.3;
+}
+.nav-link-item .link-ja {
+  font-size: 9px; color: rgba(255,255,255,0.45);
+  letter-spacing: 0.06em; margin-top: 1px;
+}
+.nav-link-item::after {
+  content: ''; position: absolute; bottom: 4px; left: 14px; right: 14px;
+  height: 1px; background: var(--white);
+  transform: scaleX(0); transition: transform 0.3s;
+  transform-origin: left;
+}
+.nav-link-item:hover::after { transform: scaleX(1); }
 
-        <!-- MAIN PANEL -->
-        <div id="mainPanel">
+/* Nav CTA */
+.nav-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--white); color: var(--navy);
+  padding: 10px 22px; border-radius: var(--r-sm);
+  font-size: 13px; font-weight: 800; letter-spacing: -0.01em;
+  margin-left: 14px; transition: all 0.25s;
+  white-space: nowrap; text-decoration: none;
+}
+.nav-cta:hover { background: var(--off-white); color: var(--coral); }
 
-          <!-- ── DASHBOARD TAB ── -->
-          <div id="panelDashboard" class="tab-panel active">
-            <div class="panel-card">
-              <div class="panel-header">
-                <h3>Dashboard</h3>
-                <a href="sell.html" class="btn-xs btn-xs-coral">
-                  <i class="fas fa-plus"></i> 新規出品
-                </a>
-              </div>
-              <div class="panel-body">
-                <div class="stat-chips" id="statChips">
-                  <div class="stat-chip">
-                    <div class="stat-chip-num stat-active" id="statActive">—</div>
-                    <div class="stat-chip-label">出品中</div>
-                  </div>
-                  <div class="stat-chip">
-                    <div class="stat-chip-num stat-reserved" id="statReserved">—</div>
-                    <div class="stat-chip-label">予約済み</div>
-                  </div>
-                  <div class="stat-chip">
-                    <div class="stat-chip-num stat-done" id="statDone">—</div>
-                    <div class="stat-chip-label">取引完了</div>
-                  </div>
-                </div>
+/* Auth buttons */
+.btn-login-nav {
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  color: var(--white); padding: 8px 18px; border-radius: var(--r-sm);
+  font-size: 13px; font-weight: 700; margin-left: 10px;
+  transition: all 0.25s; font-family: var(--font-en);
+}
+.btn-login-nav:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
 
-                <div style="padding-top:16px;border-top:1px solid var(--border-light);display:flex;flex-direction:column;gap:14px;">
-                  <a href="sell.html" style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--bg-light);border-radius:var(--r);border:1px solid var(--border-light);transition:box-shadow 0.2s;" onmouseover="this.style.boxShadow='var(--shadow-sm)'" onmouseout="this.style.boxShadow=''">
-                    <div style="width:42px;height:42px;border-radius:var(--r-sm);background:var(--navy);display:flex;align-items:center;justify-content:center;color:white;font-size:1.1rem;flex-shrink:0;">
-                      <i class="fas fa-plus"></i>
-                    </div>
-                    <div>
-                      <div style="font-size:14px;font-weight:700;color:var(--navy);">新しく出品する</div>
-                      <div style="font-size:12px;color:var(--text-muted);">教科書を出品して後輩に繋げよう</div>
-                    </div>
-                    <i class="fas fa-chevron-right" style="margin-left:auto;color:var(--text-muted);font-size:12px;"></i>
-                  </a>
-                  <a href="listings.html" style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--bg-light);border-radius:var(--r);border:1px solid var(--border-light);transition:box-shadow 0.2s;" onmouseover="this.style.boxShadow='var(--shadow-sm)'" onmouseout="this.style.boxShadow=''">
-                    <div style="width:42px;height:42px;border-radius:var(--r-sm);background:var(--coral);display:flex;align-items:center;justify-content:center;color:white;font-size:1.1rem;flex-shrink:0;">
-                      <i class="fas fa-search"></i>
-                    </div>
-                    <div>
-                      <div style="font-size:14px;font-weight:700;color:var(--navy);">教科書を探す</div>
-                      <div style="font-size:12px;color:var(--text-muted);">必要な教科書を検索しよう</div>
-                    </div>
-                    <i class="fas fa-chevron-right" style="margin-left:auto;color:var(--text-muted);font-size:12px;"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+.nav-user-badge {
+  display: flex; align-items: center; gap: 8px;
+  cursor: pointer; margin-left: 12px;
+  color: var(--white); font-size: 13px; font-weight: 600;
+  padding: 8px 16px; border-radius: var(--r-sm);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  transition: all 0.25s; text-decoration: none;
+}
+.nav-user-badge:hover { background: rgba(255,255,255,0.1); }
+.nav-user-badge i { font-size: 15px; }
 
-          <!-- ── MY LISTINGS TAB ── -->
-          <div id="panelMyListings" class="tab-panel">
-            <div class="panel-card">
-              <div class="panel-header">
-                <h3>出品中の教科書</h3>
-                <a href="sell.html" class="btn-xs btn-xs-coral">
-                  <i class="fas fa-plus"></i> 新規出品
-                </a>
-              </div>
-              <div class="panel-body" id="myListingsBody">
-                <div class="loading"><div class="spinner"></div></div>
-              </div>
-            </div>
-          </div>
+/* Hamburger */
+.hamburger { display: none; flex-direction: column; gap: 5px; padding: 6px; }
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: 0.3s; }
 
-          <!-- ── SENT RESERVATIONS TAB ── -->
-          <div id="panelSentRes" class="tab-panel">
-            <div class="panel-card">
-              <div class="panel-header">
-                <h3>送った購入希望</h3>
-              </div>
-              <div class="panel-body" id="sentResBody">
-                <div class="loading"><div class="spinner"></div></div>
-              </div>
-            </div>
-          </div>
+/* ===================================================
+   BUTTONS
+   =================================================== */
+.btn-white {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--white); color: var(--navy);
+  padding: 13px 28px; border-radius: var(--r-sm);
+  font-family: var(--font-en); font-size: 14px; font-weight: 800;
+  letter-spacing: -0.01em; transition: all 0.25s;
+  white-space: nowrap; text-decoration: none;
+}
+.btn-white:hover { background: #f0f2f5; color: var(--coral); }
 
-          <!-- ── RECEIVED RESERVATIONS TAB ── -->
-          <div id="panelReceivedRes" class="tab-panel">
-            <div class="panel-card">
-              <div class="panel-header">
-                <h3>受け取った購入希望</h3>
-              </div>
-              <div class="panel-body" id="receivedResBody">
-                <div class="loading"><div class="spinner"></div></div>
-              </div>
-            </div>
-          </div>
+.btn-navy {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--navy); color: var(--white);
+  padding: 13px 28px; border-radius: var(--r-sm);
+  font-family: var(--font-en); font-size: 14px; font-weight: 800;
+  transition: all 0.25s; white-space: nowrap; text-decoration: none;
+}
+.btn-navy:hover { background: var(--navy-dark); }
 
-          <!-- ── PROFILE TAB ── -->
-          <div id="panelProfile" class="tab-panel">
-            <div class="panel-card">
-              <div class="panel-header">
-                <h3>プロフィール編集</h3>
-              </div>
-              <div class="panel-body">
-                <form class="profile-form" onsubmit="saveProfile(event)">
-                  <div class="form-row">
-                    <div class="form-group required">
-                      <label>お名前</label>
-                      <input type="text" id="profName" required />
-                    </div>
-                    <div class="form-group required">
-                      <label>メールアドレス</label>
-                      <input type="email" id="profEmail" required />
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group">
-                      <label>大学名</label>
-                      <input type="text" id="profUniversity" />
-                    </div>
-                    <div class="form-group">
-                      <label>学部</label>
-                      <input type="text" id="profFaculty" />
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>学年</label>
-                    <select id="profGrade">
-                      <option value="1年">1年</option>
-                      <option value="2年">2年</option>
-                      <option value="3年" selected>3年</option>
-                      <option value="4年">4年</option>
-                      <option value="院生">院生</option>
-                    </select>
-                  </div>
-                  <div style="display:flex;gap:12px;margin-top:8px;">
-                    <button type="submit" class="btn-navy">
-                      <i class="fas fa-save"></i> 保存する
-                    </button>
-                    <button type="button" onclick="switchTab('dashboard')" class="btn-outline">
-                      キャンセル
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
+.btn-coral {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--coral); color: var(--white);
+  padding: 13px 28px; border-radius: var(--r-sm);
+  font-family: var(--font-en); font-size: 14px; font-weight: 800;
+  transition: all 0.25s; text-decoration: none;
+}
+.btn-coral:hover { background: var(--coral-hover); }
 
-        </div><!-- /mainPanel -->
-      </div><!-- /mypage-layout -->
-    </div><!-- /mypageContent -->
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 2px solid var(--navy); color: var(--navy);
+  padding: 11px 26px; border-radius: var(--r-sm);
+  font-family: var(--font-en); font-size: 14px; font-weight: 800;
+  transition: all 0.25s; background: transparent; text-decoration: none;
+}
+.btn-outline:hover { background: var(--navy); color: var(--white); }
 
-  </div>
-</main>
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1.5px solid rgba(255,255,255,0.35);
+  color: var(--white); padding: 11px 26px; border-radius: var(--r-sm);
+  font-size: 14px; font-weight: 800; transition: all 0.25s; text-decoration: none;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.7); }
 
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-top">
-    <div>
-      <div class="footer-brand-name">TETOMI</div>
-      <p class="footer-brand-tagline">手から手へ、教科書とつながりを。<br />送料ゼロ・手数料ゼロ</p>
-    </div>
-    <div class="footer-col">
-      <h4>Service</h4>
-      <a href="listings.html">教科書を探す</a>
-      <a href="sell.html">出品する</a>
-      <a href="mypage.html">マイページ</a>
-    </div>
-    <div class="footer-col">
-      <h4>Info</h4>
-      <a href="index.html#about">TETOMIとは</a>
-      <a href="index.html#faq">よくある質問</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© 2025 TETOMI for GLOMAC.</p>
-    <div class="footer-policies">
-      <a href="#">利用規約</a>
-      <a href="#">プライバシーポリシー</a>
-    </div>
-  </div>
-</footer>
+.btn-lg { padding: 15px 36px !important; font-size: 15px !important; }
+.btn-sm { padding: 8px 18px !important; font-size: 12px !important; }
+.btn-full { width: 100%; justify-content: center; }
+.btn-danger { background: #ef4444; color: white; padding: 10px 20px; border-radius: var(--r-sm); font-weight: 700; font-size: 13px; transition: background 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+.btn-danger:hover { background: #dc2626; }
 
-<!-- LOGIN MODAL -->
-<div class="modal-overlay hidden" id="loginModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('loginModal')"><i class="fas fa-times"></i></button>
-    <div class="modal-logo">TETOMI</div>
-    <h2 class="modal-title">ログイン / 新規登録</h2>
-    <p class="modal-sub">大学メールアドレスでログインしてください</p>
-    <form onsubmit="handleLogin(event)">
-      <div class="form-group required"><label>お名前</label><input type="text" id="loginName" placeholder="山田 太郎" required /></div>
-      <div class="form-group required"><label>メールアドレス</label><input type="email" id="loginEmail" placeholder="example@glomac.ac.jp" required /></div>
-      <div class="form-group"><label>大学名</label><input type="text" id="loginUniversity" placeholder="GLOMAC大学" /></div>
-      <div class="form-group"><label>学部</label><input type="text" id="loginFaculty" placeholder="工学部" /></div>
-      <div class="form-group"><label>学年</label>
-        <select id="loginGrade">
-          <option value="1年">1年</option><option value="2年">2年</option>
-          <option value="3年" selected>3年</option><option value="4年">4年</option><option value="院生">院生</option>
-        </select>
-      </div>
-      <button type="submit" class="btn-navy btn-full" style="margin-top:10px;"><i class="fas fa-sign-in-alt"></i> ログイン / 登録</button>
-    </form>
-    <div class="modal-demo">
-      <p class="modal-demo-title">— デモユーザーで試す —</p>
-      <div class="demo-btns">
-        <button onclick="loginAsDemo('user_001')" class="demo-btn">田中 蓮（工学部 3年）</button>
-        <button onclick="loginAsDemo('user_002')" class="demo-btn">佐藤 葵（経済学部 2年）</button>
-        <button onclick="loginAsDemo('user_003')" class="demo-btn">山本 海斗（文学部 4年）</button>
-      </div>
-    </div>
-  </div>
-</div>
+/* ===================================================
+   SECTION COMMON
+   =================================================== */
+.section { padding: 80px 40px; }
+.section-inner { max-width: var(--max-w); margin: 0 auto; }
+.section-label {
+  font-family: var(--font-en);
+  font-size: 12px; font-weight: 800; letter-spacing: 0.22em;
+  color: var(--navy); text-transform: uppercase;
+  margin-bottom: 10px; display: inline-block;
+  border-bottom: 2px solid var(--navy); padding-bottom: 4px;
+}
+.section-heading {
+  font-family: var(--font-en);
+  font-size: clamp(2rem, 3.5vw, 3.4rem);
+  font-weight: 700; line-height: 1.35; color: var(--navy);
+  letter-spacing: 0;
+}
+.section-heading-center { text-align: center; }
+.section-body {
+  font-size: 1.05rem; font-weight: 500;
+  color: var(--navy); line-height: 1.85;
+  letter-spacing: 0.05em;
+}
 
-<div class="toast hidden" id="toast"></div>
-<script src="js/app.js"></script>
-<script>
-/* ===== mypage.html ===== */
+/* ===================================================
+   PAGE HEADER
+   =================================================== */
+.page-header {
+  background: var(--navy);
+  padding: calc(var(--nav-h) + 52px) 40px 52px;
+}
+.page-header-inner { max-width: var(--max-w); margin: 0 auto; }
+.page-header h1 {
+  font-family: var(--font-en);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 900; color: var(--white); letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+.page-header p { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+.breadcrumb {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: rgba(255,255,255,0.45);
+  margin-bottom: 14px;
+}
+.breadcrumb a { color: rgba(255,255,255,0.45); transition: color 0.2s; }
+.breadcrumb a:hover { color: var(--white); }
+.breadcrumb span { color: rgba(255,255,255,0.8); }
 
-let mpUser = null;
+/* ===================================================
+   SEARCH / FILTER BAR
+   =================================================== */
+.search-filter-bar {
+  background: var(--white); border-radius: var(--r-lg);
+  padding: 24px; box-shadow: var(--shadow);
+  border: 1px solid var(--border-light);
+  margin-bottom: 28px;
+}
+.search-bar { display: flex; gap: 10px; margin-bottom: 14px; }
+.search-bar input {
+  flex: 1; padding: 13px 18px; border-radius: var(--r-sm);
+  border: 1.5px solid var(--border); font-size: 14px; color: var(--text-dark);
+  background: var(--bg-light); outline: none; transition: border-color 0.2s;
+  font-family: var(--font-en);
+}
+.search-bar input:focus { border-color: var(--navy); background: var(--white); }
+.search-bar button {
+  background: var(--navy); color: var(--white); padding: 13px 24px;
+  border-radius: var(--r-sm); font-weight: 800; font-size: 13px;
+  font-family: var(--font-en); transition: background 0.2s;
+}
+.search-bar button:hover { background: var(--navy-dark); }
+.filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.filter-select {
+  padding: 8px 14px; border-radius: var(--r-full);
+  border: 1.5px solid var(--border); font-size: 13px; color: var(--text-dark);
+  background: var(--white); cursor: pointer; outline: none;
+  font-family: var(--font-en); transition: border-color 0.2s;
+}
+.filter-select:focus { border-color: var(--navy); }
+.filter-reset {
+  padding: 8px 16px; border-radius: var(--r-full);
+  border: 1.5px solid var(--border); font-size: 13px; font-weight: 600;
+  color: var(--text-muted); background: var(--white); cursor: pointer;
+  transition: all 0.2s; font-family: var(--font-en);
+}
+.filter-reset:hover { border-color: var(--navy); color: var(--navy); }
+.result-count { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+.result-count strong { color: var(--navy); font-weight: 800; }
 
-document.addEventListener('DOMContentLoaded', () => {
-  mpUser = getUser();
-  if (!mpUser) {
-    document.getElementById('notLoggedIn').classList.remove('hidden');
-    return;
+/* ===================================================
+   LISTING CARDS
+   =================================================== */
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+.listing-card {
+  background: var(--white); border-radius: var(--r-lg);
+  overflow: hidden; cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-sm);
+}
+.listing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(20,49,74,0.25);
+}
+.card-img {
+  width: 100%; height: 170px;
+  background: linear-gradient(135deg, #d8dfe5 0%, #e6e9ec 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3.8rem; position: relative; overflow: hidden;
+}
+.card-img img { width: 100%; height: 100%; object-fit: cover; }
+.card-status-badge {
+  position: absolute; top: 10px; right: 10px;
+  padding: 3px 10px; border-radius: var(--r-full);
+  font-size: 10px; font-weight: 800; letter-spacing: 0.05em;
+}
+.badge-active   { background: rgba(20,49,74,0.85); color: var(--white); }
+.badge-reserved { background: rgba(255,80,53,0.9); color: var(--white); }
+.badge-done     { background: rgba(100,116,139,0.8); color: var(--white); }
+.card-body { padding: 14px 16px 16px; }
+.card-title {
+  font-family: var(--font-en); font-size: 14px; font-weight: 700;
+  color: var(--navy); margin-bottom: 4px; line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.card-subject { font-size: 11px; color: var(--text-muted); margin-bottom: 12px; display: flex; align-items: center; gap: 4px; }
+.card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.card-price {
+  font-family: var(--font-en); font-size: 1.35rem; font-weight: 900;
+  color: var(--navy);
+}
+.card-condition {
+  font-size: 10px; font-weight: 800; padding: 3px 10px;
+  border-radius: var(--r-full);
+}
+.condition-new  { background: #ecfdf5; color: #065f46; }
+.condition-good { background: #eff6ff; color: #1e40af; }
+.condition-few  { background: #fffbeb; color: #92400e; }
+.condition-worn { background: #fef2f2; color: #991b1b; }
+.cond-new  { background: #ecfdf5; color: #065f46; }
+.cond-good { background: #eff6ff; color: #1e40af; }
+.cond-few  { background: #fffbeb; color: #92400e; }
+.cond-worn { background: #fef2f2; color: #991b1b; }
+.card-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 10px; border-top: 1px solid var(--border-light);
+  font-size: 11px; color: var(--text-muted);
+}
+.card-seller { display: flex; align-items: center; gap: 5px; }
+.card-status { font-size: 10px; font-weight: 700; }
+.status-active { color: var(--navy); }
+.status-reserved { color: var(--coral); }
+.status-done { color: var(--text-muted); }
+
+/* Skeleton */
+.skeleton-card { background: var(--bg-gray); border-radius: var(--r-lg); height: 290px; animation: skeletonPulse 1.5s ease-in-out infinite; }
+@keyframes skeletonPulse { 0%,100%{ opacity:0.5; } 50%{ opacity:1; } }
+
+/* ===================================================
+   DETAIL PAGE
+   =================================================== */
+.detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; align-items: start; }
+.detail-img-wrap {
+  border-radius: var(--r-lg); overflow: hidden;
+  aspect-ratio: 4/3;
+  background: var(--bg-gray);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 6rem; position: sticky; top: calc(var(--nav-h) + 20px);
+}
+.detail-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.detail-info { display: flex; flex-direction: column; gap: 22px; }
+.detail-title {
+  font-family: var(--font-en); font-size: clamp(1.4rem,2.5vw,1.9rem);
+  font-weight: 900; color: var(--navy); line-height: 1.3; letter-spacing: 0.01em;
+}
+.detail-subject { font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+.detail-price {
+  font-family: var(--font-en); font-size: 2.6rem; font-weight: 900; color: var(--navy);
+  display: flex; align-items: baseline; gap: 6px;
+}
+.detail-price small { font-size: 1rem; font-weight: 500; color: var(--text-muted); }
+.detail-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.meta-item {
+  background: var(--bg-light); border-radius: var(--r-sm); padding: 12px 16px;
+  border: 1px solid var(--border-light);
+}
+.meta-label {
+  font-size: 10px; font-weight: 800; color: var(--text-muted);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 5px;
+}
+.meta-value { font-size: 14px; font-weight: 700; color: var(--navy); }
+.detail-desc {
+  background: var(--bg-light); border-radius: var(--r-sm); padding: 20px;
+  border-left: 3px solid var(--navy);
+}
+.detail-desc h4 {
+  font-size: 10px; font-weight: 800; color: var(--text-muted);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px;
+}
+.detail-desc p { font-size: 14px; color: var(--text-dark); line-height: 1.8; white-space: pre-line; }
+
+/* Seller Card */
+.seller-card {
+  background: var(--white); border-radius: var(--r-lg); padding: 20px;
+  border: 1px solid var(--border-light);
+  display: flex; align-items: center; gap: 14px;
+}
+.seller-avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-en); font-size: 1.3rem; font-weight: 900;
+  color: var(--white); flex-shrink: 0;
+}
+.seller-info { flex: 1; }
+.seller-info h4 { font-size: 15px; font-weight: 700; color: var(--navy); }
+.seller-info p { font-size: 12px; color: var(--text-muted); }
+.seller-rating { font-size: 13px; color: var(--coral); font-weight: 700; margin-top: 4px; }
+
+/* Action Buttons */
+.action-buttons { display: flex; flex-direction: column; gap: 10px; }
+.action-buttons .btn-navy,
+.action-buttons .btn-white,
+.action-buttons .btn-outline { width: 100%; justify-content: center; font-size: 15px; padding: 15px; }
+
+/* ===================================================
+   SELL / FORM
+   =================================================== */
+.sell-container { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+.form-card {
+  background: var(--white); border-radius: var(--r-lg); padding: 36px 40px;
+  box-shadow: var(--shadow); border: 1px solid var(--border-light);
+  margin-bottom: 20px;
+}
+.form-card h2 {
+  font-family: var(--font-en); font-size: 1.05rem; font-weight: 900;
+  color: var(--navy); margin-bottom: 24px; padding-bottom: 14px;
+  border-bottom: 2px solid var(--navy); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.form-group { margin-bottom: 18px; }
+.form-group label {
+  display: block; font-size: 11px; font-weight: 800;
+  color: var(--navy); margin-bottom: 7px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%; padding: 12px 16px; border-radius: var(--r-sm);
+  border: 1.5px solid var(--border); font-size: 14px; color: var(--text-dark);
+  background: var(--bg-light); outline: none; transition: all 0.2s;
+  font-family: var(--font-en);
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--navy); background: var(--white);
+  box-shadow: 0 0 0 3px rgba(20,49,74,0.08);
+}
+.form-group textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-hint { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+.form-group.required label::after { content: ' *'; color: var(--coral); }
+
+/* Image Upload */
+.upload-area {
+  border: 2px dashed var(--border); border-radius: var(--r);
+  padding: 40px 24px; text-align: center; cursor: pointer;
+  transition: all 0.25s; background: var(--bg-light);
+}
+.upload-area:hover { border-color: var(--navy); background: rgba(20,49,74,0.03); }
+.upload-area i { font-size: 2.5rem; color: var(--navy); opacity: 0.35; margin-bottom: 12px; display: block; }
+.upload-area p { font-size: 13px; color: var(--text-muted); }
+.upload-area strong { color: var(--navy); }
+.preview-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 12px; }
+.preview-thumb {
+  aspect-ratio: 1; border-radius: var(--r-sm); overflow: hidden;
+  position: relative; background: var(--bg-gray);
+}
+.preview-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.preview-thumb button {
+  position: absolute; top: 4px; right: 4px;
+  background: rgba(20,49,74,0.7); color: white; border-radius: 50%;
+  width: 22px; height: 22px; font-size: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Condition Selector */
+.condition-selector { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+.condition-opt {
+  padding: 14px 10px; border: 2px solid var(--border); border-radius: var(--r);
+  cursor: pointer; text-align: center; transition: all 0.2s;
+  font-size: 13px; font-weight: 700; color: var(--text-muted);
+  line-height: 1.5;
+}
+.condition-opt:hover { border-color: var(--navy); color: var(--navy); }
+.condition-opt.selected { border-color: var(--navy); background: rgba(20,49,74,0.06); color: var(--navy); }
+
+/* ===================================================
+   MYPAGE
+   =================================================== */
+.mypage-layout { display: grid; grid-template-columns: 260px 1fr; gap: 28px; align-items: start; }
+.mypage-sidebar {
+  background: var(--white); border-radius: var(--r-lg); overflow: hidden;
+  border: 1px solid var(--border-light); box-shadow: var(--shadow-sm);
+  position: sticky; top: calc(var(--nav-h) + 20px);
+}
+.sidebar-profile {
+  background: var(--navy); padding: 28px 20px; text-align: center;
+}
+.sidebar-avatar {
+  width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 12px;
+  background: rgba(255,255,255,0.18);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-en); font-size: 1.8rem; font-weight: 900; color: var(--white);
+  border: 3px solid rgba(255,255,255,0.35);
+}
+.sidebar-name { font-size: 15px; font-weight: 700; color: var(--white); }
+.sidebar-univ { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 4px; }
+.sidebar-rating { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 13px; color: var(--coral); font-weight: 700; margin-top: 8px; }
+.sidebar-nav { padding: 10px 0; }
+.sidebar-nav-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 20px; font-size: 13px; font-weight: 700;
+  color: var(--text-mid); cursor: pointer; transition: all 0.2s;
+  border-left: 3px solid transparent;
+  font-family: var(--font-en); letter-spacing: 0.01em;
+}
+.sidebar-nav-item:hover { background: var(--bg-light); color: var(--navy); border-left-color: var(--navy); }
+.sidebar-nav-item.active { background: rgba(20,49,74,0.05); color: var(--navy); border-left-color: var(--navy); }
+.sidebar-nav-item i { font-size: 15px; color: var(--navy); opacity: 0.55; width: 18px; }
+.sidebar-nav-item.active i { opacity: 1; }
+.sidebar-nav-item.danger { color: #ef4444; }
+.sidebar-nav-item.danger i { color: #ef4444; opacity: 1; }
+.pending-dot {
+  margin-left: auto; background: var(--coral); color: white;
+  font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: var(--r-full);
+}
+
+/* Panel */
+.panel-card {
+  background: var(--white); border-radius: var(--r-lg);
+  border: 1px solid var(--border-light); overflow: hidden; box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+}
+.panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px; border-bottom: 1px solid var(--border-light);
+  background: var(--bg-light);
+}
+.panel-header h3 {
+  font-family: var(--font-en); font-size: 13px; font-weight: 900;
+  color: var(--navy); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.panel-body { padding: 24px; }
+.stat-chips { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+.stat-chip {
+  background: var(--bg-light); border-radius: var(--r); padding: 16px;
+  text-align: center; border: 1px solid var(--border-light);
+}
+.stat-chip-num {
+  font-family: var(--font-en); font-size: 2rem; font-weight: 900; line-height: 1;
+}
+.stat-chip-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+.stat-active { color: var(--navy); }
+.stat-reserved { color: var(--coral); }
+.stat-done { color: #10b981; }
+
+/* Reservation Item */
+.reservation-item {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 16px 0; border-bottom: 1px solid var(--border-light);
+}
+.reservation-item:last-child { border-bottom: none; }
+.res-thumb {
+  width: 56px; height: 56px; flex-shrink: 0; border-radius: var(--r-sm);
+  background: var(--bg-gray);
+  display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+}
+.res-info { flex: 1; }
+.res-info h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.res-info p { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.res-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; flex-shrink: 0; }
+
+/* Badge */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 4px 12px; border-radius: var(--r-full);
+  font-size: 10px; font-weight: 800; letter-spacing: 0.05em;
+}
+.badge-pending   { background: #fffbeb; color: #b45309; }
+.badge-confirmed { background: #ecfdf5; color: #065f46; }
+.badge-done      { background: var(--bg-gray); color: var(--text-muted); }
+.badge-cancelled { background: #fef2f2; color: #991b1b; }
+
+/* Tab Panel */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ===================================================
+   MODAL
+   =================================================== */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(8,18,28,0.7); backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  animation: fadeOverlay 0.25s;
+}
+@keyframes fadeOverlay { from { opacity:0; } to { opacity:1; } }
+.modal {
+  background: var(--white); border-radius: var(--r-xl);
+  padding: 40px; max-width: 480px; width: 100%; max-height: 92vh; overflow-y: auto;
+  position: relative; animation: modalUp 0.3s cubic-bezier(0.39,0.575,0.565,1);
+}
+@keyframes modalUp { from { transform: translateY(28px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--bg-light); color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; transition: all 0.2s;
+}
+.modal-close:hover { background: var(--bg-gray); color: var(--navy); }
+.modal-logo {
+  font-family: var(--font-en); font-size: 1.5rem; font-weight: 900;
+  color: var(--navy); letter-spacing: 0.12em; margin-bottom: 8px;
+}
+.modal-title { font-size: 1.1rem; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+.modal-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+.modal-demo { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-light); }
+.modal-demo-title { text-align: center; font-size: 11px; color: var(--text-muted); margin-bottom: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+.demo-btns { display: flex; flex-direction: column; gap: 8px; }
+.demo-btn {
+  background: var(--bg-light); color: var(--navy);
+  padding: 11px 16px; border-radius: var(--r-sm);
+  font-size: 13px; font-weight: 600; text-align: center; transition: all 0.2s;
+  border: 1px solid var(--border-light); font-family: var(--font-en);
+}
+.demo-btn:hover { background: var(--navy); color: var(--white); }
+
+/* ===================================================
+   TOAST
+   =================================================== */
+.toast {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+  background: var(--navy); color: var(--white); padding: 13px 28px;
+  border-radius: var(--r-full); font-size: 13px; font-weight: 700; z-index: 9999;
+  box-shadow: var(--shadow-xl); animation: toastIn 0.3s;
+  font-family: var(--font-en); letter-spacing: 0.02em; white-space: nowrap;
+}
+.toast.success { background: #059669; }
+.toast.error   { background: var(--coral); }
+.toast.warning { background: #d97706; }
+@keyframes toastIn { from { opacity:0; transform: translateX(-50%) translateY(16px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
+
+/* ===================================================
+   FOOTER
+   =================================================== */
+.footer { background: var(--navy); color: rgba(255,255,255,0.55); padding: 64px 0 0; }
+.footer-top {
+  display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px;
+  padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08);
+  max-width: var(--max-w); margin: 0 auto; padding-left: 40px; padding-right: 40px;
+}
+.footer-brand-name {
+  font-family: var(--font-en); font-size: 1.6rem; font-weight: 900;
+  color: var(--white); letter-spacing: 0.14em; margin-bottom: 12px;
+}
+.footer-brand-tagline { font-size: 12px; line-height: 1.9; color: rgba(255,255,255,0.45); }
+.footer-col h4 {
+  font-family: var(--font-en); font-size: 10px; font-weight: 900;
+  color: var(--white); letter-spacing: 0.18em; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.footer-col a {
+  display: block; font-size: 13px; color: rgba(255,255,255,0.45);
+  margin-bottom: 10px; transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--white); }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 40px; font-size: 11px; max-width: var(--max-w); margin: 0 auto;
+}
+.footer-policies { display: flex; gap: 20px; }
+.footer-policies a { color: rgba(255,255,255,0.35); transition: color 0.2s; }
+.footer-policies a:hover { color: var(--white); }
+
+/* ===================================================
+   MISC UTILITY
+   =================================================== */
+.loading { display: flex; align-items: center; justify-content: center; padding: 60px; }
+.spinner {
+  width: 36px; height: 36px; border: 3px solid var(--border);
+  border-top-color: var(--navy); border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.empty-state { text-align: center; padding: 72px 20px; color: var(--text-muted); }
+.empty-state .empty-icon { font-size: 4rem; margin-bottom: 16px; }
+.empty-state h3 { font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.empty-state p { font-size: 14px; }
+.empty-text { text-align: center; color: var(--text-muted); padding: 48px 20px; grid-column: 1/-1; font-size: 14px; }
+.page-main { padding-top: calc(var(--nav-h) + 32px); padding-bottom: 80px; }
+
+/* Scroll fade-in animation */
+.fade-in {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible {
+  opacity: 1; transform: translateY(0);
+}
+
+/* ===================================================
+   RESPONSIVE
+   =================================================== */
+@media (max-width: 1024px) {
+  .container { padding: 0 24px; }
+  .section { padding: 64px 24px; }
+  .detail-layout { grid-template-columns: 1fr; }
+  .detail-img-wrap { position: static; }
+  .mypage-layout { grid-template-columns: 1fr; }
+  .mypage-sidebar { position: static; }
+  .sidebar-nav { display: flex; flex-direction: row; flex-wrap: wrap; padding: 0; }
+  .sidebar-nav-item { border-left: none; border-bottom: 3px solid transparent; flex: 1; justify-content: center; min-width: 100px; }
+  .sidebar-nav-item.active { border-bottom-color: var(--navy); border-left: none; background: var(--bg-light); }
+  .footer-top { padding-bottom: 40px; }
+  .nav-container { padding: 0 24px; }
+}
+@media (max-width: 768px) {
+  :root { --nav-h: 60px; }
+  .nav-container { padding: 0 16px; }
+  .nav-links {
+    display: none; flex-direction: column;
+    position: absolute; top: var(--nav-h); left: 0; right: 0;
+    background: var(--navy); padding: 16px 20px 20px;
+    box-shadow: var(--shadow-xl); gap: 4px;
   }
-  document.getElementById('mypageContent').classList.remove('hidden');
-  renderSidebar(mpUser);
-  document.getElementById('mpHeaderSub').textContent = `${mpUser.name}さんのページ`;
-  loadDashboard();
-  loadMyListings();
-  loadSentReservations();
-  loadReceivedReservations();
-  fillProfileForm(mpUser);
-});
-
-// ── SIDEBAR ──
-function renderSidebar(user) {
-  document.getElementById('sidebarAvatar').textContent = (user.name || '?').charAt(0);
-  document.getElementById('sidebarName').textContent   = user.name || '—';
-  document.getElementById('sidebarUniv').textContent   = `${user.faculty || ''} ${user.grade || ''}`.trim() || 'GLOMAC学生';
-  document.getElementById('sidebarRating').textContent = user.rating || '5.0';
+  .nav-links.open { display: flex; }
+  .hamburger { display: flex; }
+  .nav-link-item { align-items: flex-start; padding: 10px 8px; }
+  .nav-link-item::after { display: none; }
+  .btn-login-nav { margin-left: 0; }
+  .nav-cta { margin-left: 0; }
+  .nav-user-badge { margin-left: 0; }
+  .detail-meta-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .form-card { padding: 24px 18px; }
+  .modal { padding: 28px 20px; }
+  .footer-top { grid-template-columns: 1fr; gap: 28px; padding-left: 20px; padding-right: 20px; }
+  .footer-bottom { flex-direction: column; gap: 8px; text-align: center; padding-left: 20px; padding-right: 20px; }
+  .side-tab { display: none; }
+  .stat-chips { grid-template-columns: repeat(3, 1fr); }
+  .page-header { padding: calc(var(--nav-h) + 32px) 20px 32px; }
 }
-
-// ── TAB SWITCH ──
-function switchTab(name) {
-  const panels = ['Dashboard','MyListings','SentRes','ReceivedRes','Profile'];
-  panels.forEach(p => {
-    document.getElementById(`panel${p}`).classList.toggle('active', p.toLowerCase() === name.toLowerCase());
-  });
-  const tabs = ['Dashboard','MyListings','SentRes','ReceivedRes','Profile'];
-  tabs.forEach(t => {
-    const el = document.getElementById(`tab${t}`);
-    if (el) el.classList.toggle('active', t.toLowerCase() === name.toLowerCase());
-  });
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+  .section { padding: 48px 16px; }
+  .listings-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .card-img { height: 120px; font-size: 2.5rem; }
+  .card-body { padding: 10px; }
+  .card-title { font-size: 13px; }
+  .card-price { font-size: 1.15rem; }
+  .condition-selector { grid-template-columns: 1fr 1fr; }
+  .stat-chips { grid-template-columns: 1fr 1fr 1fr; }
 }
-
-// ── DASHBOARD ──
-async function loadDashboard() {
-  try {
-    const res  = await fetch(`tables/listings?limit=200`);
-    const data = await res.json();
-    const mine = (data.data || []).filter(l => l.seller_id === mpUser.id);
-    document.getElementById('statActive').textContent   = mine.filter(l => l.status === '出品中').length;
-    document.getElementById('statReserved').textContent = mine.filter(l => l.status === '予約済み').length;
-    document.getElementById('statDone').textContent     = mine.filter(l => l.status === '完了').length;
-  } catch {}
-}
-
-// ── MY LISTINGS ──
-async function loadMyListings() {
-  const body = document.getElementById('myListingsBody');
-  try {
-    const res  = await fetch('tables/listings?limit=200');
-    const data = await res.json();
-    const mine = (data.data || []).filter(l => l.seller_id === mpUser.id);
-
-    if (mine.length === 0) {
-      body.innerHTML = `<div class="empty-state"><div class="empty-icon">📚</div><h3>出品中の教科書はありません</h3><p style="margin-bottom:20px;">最初の教科書を出品してみましょう。</p><a href="sell.html" class="btn-navy"><i class="fas fa-plus"></i> 出品する</a></div>`;
-
-      // Badge
-      document.getElementById('listingsBadge').classList.add('hidden');
-      return;
-    }
-
-    // Badge
-    const pendingCount = mine.filter(l => l.status === '出品中').length;
-    if (pendingCount > 0) {
-      const badge = document.getElementById('listingsBadge');
-      badge.textContent = pendingCount;
-      badge.classList.remove('hidden');
-    }
-
-    body.innerHTML = '';
-    mine.sort((a,b) => Number(b.created_at) - Number(a.created_at)).forEach(item => {
-      const c = conditionLabel(item.condition);
-      const div = document.createElement('div');
-      div.className = 'listing-manage-item';
-      const statusBadge = item.status === '出品中' ? 'badge-confirmed' : item.status === '予約済み' ? 'badge-pending' : 'badge-done';
-      div.innerHTML = `
-        <div class="lm-thumb" onclick="location.href='detail.html?id=${item.id}'">${item.image_url ? `<img src="${item.image_url}" alt="" />` : getBookEmoji(item.title)}</div>
-        <div class="lm-info">
-          <div class="lm-title" onclick="location.href='detail.html?id=${item.id}'">${escHtml(item.title)}</div>
-          <div class="lm-sub">
-            ${escHtml(item.subject || '')} ・ <span class="badge ${statusBadge}">${item.status}</span>
-          </div>
-          <div class="lm-actions">
-            <a href="sell.html?edit=${item.id}" class="btn-xs btn-xs-outline"><i class="fas fa-edit"></i> 編集</a>
-            ${item.status === '出品中'
-              ? `<button onclick="setListingStatus('${item.id}','完了')" class="btn-xs btn-xs-green"><i class="fas fa-check"></i> 完了にする</button>`
-              : ''}
-            <button onclick="deleteListing('${item.id}')" class="btn-xs btn-xs-danger"><i class="fas fa-trash"></i> 削除</button>
-          </div>
-        </div>
-        <div class="lm-price">¥${Number(item.price).toLocaleString()}</div>
-      `;
-      body.appendChild(div);
-    });
-  } catch(e) {
-    body.innerHTML = '<p class="empty-text">データの読み込みに失敗しました。</p>';
-  }
-}
-
-async function setListingStatus(id, status) {
-  try {
-    await fetch(`tables/listings/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status }),
-    });
-    showToast(`ステータスを「${status}」に変更しました`, 'success');
-    loadMyListings();
-    loadDashboard();
-  } catch { showToast('更新に失敗しました', 'error'); }
-}
-
-async function deleteListing(id) {
-  if (!confirm('この出品を削除しますか？')) return;
-  try {
-    await fetch(`tables/listings/${id}`, { method: 'DELETE' });
-    showToast('出品を削除しました');
-    loadMyListings();
-    loadDashboard();
-  } catch { showToast('削除に失敗しました', 'error'); }
-}
-
-// ── SENT RESERVATIONS ──
-async function loadSentReservations() {
-  const body = document.getElementById('sentResBody');
-  try {
-    const res  = await fetch('tables/reservations?limit=200');
-    const data = await res.json();
-    const sent = (data.data || []).filter(r => r.buyer_id === mpUser.id);
-
-    const pending = sent.filter(r => r.status === '申請中').length;
-    if (pending > 0) {
-      const badge = document.getElementById('sentResBadge');
-      badge.textContent = pending;
-      badge.classList.remove('hidden');
-    }
-
-    if (sent.length === 0) {
-      body.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><h3>購入希望を送った教科書はありません</h3><p style="margin-bottom:20px;">気になる教科書を見つけて購入希望を送りましょう。</p><a href="listings.html" class="btn-navy"><i class="fas fa-search"></i> 教科書を探す</a></div>`;
-      return;
-    }
-
-    body.innerHTML = '';
-    sent.sort((a,b) => Number(b.created_at) - Number(a.created_at)).forEach(r => {
-      const statusMap = {
-        '申請中': 'badge-pending',
-        '承認済み': 'badge-confirmed',
-        '完了': 'badge-done',
-        'キャンセル': 'badge-cancelled',
-      };
-      const sc = statusMap[r.status] || 'badge-pending';
-      const card = document.createElement('div');
-      card.className = 'res-card';
-      card.innerHTML = `
-        <div class="res-card-thumb">${getBookEmoji(r.listing_title)}</div>
-        <div class="res-card-body">
-          <div class="res-card-title">${escHtml(r.listing_title || '—')}</div>
-          <div class="res-card-meta">
-            出品者：${escHtml(r.seller_name || '—')}<br />
-            希望日：${escHtml(r.preferred_date || '—')} ${escHtml(r.preferred_time || '')}<br />
-            場所：${escHtml(r.preferred_location || '—')}
-            ${r.message ? `<br />メッセージ：${escHtml(r.message)}` : ''}
-          </div>
-        </div>
-        <div class="res-card-actions">
-          <span class="badge ${sc}">${r.status}</span>
-          <div style="font-size:1rem;font-weight:900;color:var(--navy);font-family:var(--font-en);">¥${Number(r.price).toLocaleString()}</div>
-          ${r.status === '申請中'
-            ? `<button onclick="cancelReservation('${r.id}')" class="btn-xs btn-xs-danger">キャンセル</button>`
-            : ''}
-        </div>
-      `;
-      body.appendChild(card);
-    });
-  } catch {
-    body.innerHTML = '<p class="empty-text">データの読み込みに失敗しました。</p>';
-  }
-}
-
-// ── RECEIVED RESERVATIONS ──
-async function loadReceivedReservations() {
-  const body = document.getElementById('receivedResBody');
-  try {
-    const res  = await fetch('tables/reservations?limit=200');
-    const data = await res.json();
-    const recv = (data.data || []).filter(r => r.seller_id === mpUser.id);
-
-    const pending = recv.filter(r => r.status === '申請中').length;
-    if (pending > 0) {
-      const badge = document.getElementById('receivedResBadge');
-      badge.textContent = pending;
-      badge.classList.remove('hidden');
-    }
-
-    if (recv.length === 0) {
-      body.innerHTML = `<div class="empty-state"><div class="empty-icon">📬</div><h3>受け取った購入希望はありません</h3><p>出品中の教科書に購入希望が届くとここに表示されます。</p></div>`;
-      return;
-    }
-
-    body.innerHTML = '';
-    recv.sort((a,b) => Number(b.created_at) - Number(a.created_at)).forEach(r => {
-      const statusMap = {
-        '申請中': 'badge-pending',
-        '承認済み': 'badge-confirmed',
-        '完了': 'badge-done',
-        'キャンセル': 'badge-cancelled',
-      };
-      const sc = statusMap[r.status] || 'badge-pending';
-      const card = document.createElement('div');
-      card.className = 'res-card';
-      card.innerHTML = `
-        <div class="res-card-thumb">${getBookEmoji(r.listing_title)}</div>
-        <div class="res-card-body">
-          <div class="res-card-title">${escHtml(r.listing_title || '—')}</div>
-          <div class="res-card-meta">
-            購入希望者：${escHtml(r.buyer_name || '—')}<br />
-            希望日：${escHtml(r.preferred_date || '—')} ${escHtml(r.preferred_time || '')}<br />
-            場所：${escHtml(r.preferred_location || '—')}
-            ${r.message ? `<br />メッセージ：${escHtml(r.message)}` : ''}
-          </div>
-        </div>
-        <div class="res-card-actions">
-          <span class="badge ${sc}">${r.status}</span>
-          <div style="font-size:1rem;font-weight:900;color:var(--navy);font-family:var(--font-en);">¥${Number(r.price).toLocaleString()}</div>
-          ${r.status === '申請中' ? `
-            <button onclick="approveReservation('${r.id}','${r.listing_id}')" class="btn-xs btn-xs-navy">
-              <i class="fas fa-check"></i> 承認
-            </button>
-            <button onclick="rejectReservation('${r.id}')" class="btn-xs btn-xs-danger">
-              <i class="fas fa-times"></i> 断る
-            </button>` : ''}
-          ${r.status === '承認済み' ? `
-            <button onclick="completeReservation('${r.id}','${r.listing_id}')" class="btn-xs btn-xs-green">
-              <i class="fas fa-handshake"></i> 取引完了
-            </button>` : ''}
-        </div>
-      `;
-      body.appendChild(card);
-    });
-  } catch {
-    body.innerHTML = '<p class="empty-text">データの読み込みに失敗しました。</p>';
-  }
-}
-
-async function approveReservation(resId, listingId) {
-  try {
-    await fetch(`tables/reservations/${resId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: '承認済み' }),
-    });
-    await fetch(`tables/listings/${listingId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: '予約済み' }),
-    });
-    showToast('購入希望を承認しました', 'success');
-    loadReceivedReservations();
-  } catch { showToast('更新に失敗しました', 'error'); }
-}
-
-async function rejectReservation(resId) {
-  if (!confirm('この購入希望を断りますか？')) return;
-  try {
-    await fetch(`tables/reservations/${resId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: 'キャンセル' }),
-    });
-    showToast('購入希望を断りました');
-    loadReceivedReservations();
-  } catch { showToast('更新に失敗しました', 'error'); }
-}
-
-async function completeReservation(resId, listingId) {
-  if (!confirm('取引を完了としてマークしますか？')) return;
-  try {
-    await fetch(`tables/reservations/${resId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: '完了' }),
-    });
-    await fetch(`tables/listings/${listingId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: '完了' }),
-    });
-    showToast('取引を完了しました！', 'success');
-    loadReceivedReservations();
-    loadDashboard();
-    loadMyListings();
-  } catch { showToast('更新に失敗しました', 'error'); }
-}
-
-async function cancelReservation(resId) {
-  if (!confirm('この購入希望をキャンセルしますか？')) return;
-  try {
-    await fetch(`tables/reservations/${resId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: 'キャンセル' }),
-    });
-    showToast('購入希望をキャンセルしました');
-    loadSentReservations();
-  } catch { showToast('更新に失敗しました', 'error'); }
-}
-
-// ── PROFILE ──
-function fillProfileForm(user) {
-  document.getElementById('profName').value       = user.name || '';
-  document.getElementById('profEmail').value      = user.email || '';
-  document.getElementById('profUniversity').value = user.university || '';
-  document.getElementById('profFaculty').value    = user.faculty || '';
-  document.getElementById('profGrade').value      = user.grade || '3年';
-}
-
-async function saveProfile(e) {
-  e.preventDefault();
-  const payload = {
-    name:       document.getElementById('profName').value.trim(),
-    email:      document.getElementById('profEmail').value.trim(),
-    university: document.getElementById('profUniversity').value.trim(),
-    faculty:    document.getElementById('profFaculty').value.trim(),
-    grade:      document.getElementById('profGrade').value,
-  };
-  try {
-    const res  = await fetch(`tables/users/${mpUser.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...mpUser, ...payload }),
-    });
-    const updated = await res.json();
-    setUser(updated);
-    mpUser = updated;
-    renderSidebar(updated);
-    updateNavUI();
-    showToast('プロフィールを更新しました', 'success');
-    switchTab('dashboard');
-  } catch { showToast('更新に失敗しました', 'error'); }
-}
-</script>
-</body>
-</html>
