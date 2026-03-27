@@ -115,7 +115,7 @@ document.addEventListener('click', e => {
 });
 
 // =================== TOAST ===================
-let toastTimer;
+var toastTimer;
 function showToast(msg, type = '') {
   const t = document.getElementById('toast');
   if (!t) return;
