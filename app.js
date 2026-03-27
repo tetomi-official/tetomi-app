@@ -3,16 +3,17 @@
    =================================================== */
 
 // =================== AUTH ===================
-const AUTH_KEY = 'tetomi_user';
+// すでに window.AUTH_KEY があれば再宣言しない
+window.AUTH_KEY = window.AUTH_KEY || 'tetomi_user';
 
 function getUser() {
-  try { return JSON.parse(localStorage.getItem(AUTH_KEY)); } catch { return null; }
+  try { return JSON.parse(localStorage.getItem(window.AUTH_KEY)); } catch { return null; }
 }
 function setUser(user) {
-  localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+  localStorage.setItem(window.AUTH_KEY, JSON.stringify(user));
 }
 function clearUser() {
-  localStorage.removeItem(AUTH_KEY);
+  localStorage.removeItem(window.AUTH_KEY);
 }
 function isLoggedIn() { return !!getUser(); }
 
