@@ -1,19 +1,18 @@
-/* =========================================
+/* ===================================================
    TETOMI - app.js  (共通ユーティリティ)
    =================================================== */
 
 // =================== AUTH ===================
-// すでに window.AUTH_KEY があれば再宣言しない
-window.AUTH_KEY = window.AUTH_KEY || 'tetomi_user';
+const AUTH_KEY = 'tetomi_user';
 
 function getUser() {
-  try { return JSON.parse(localStorage.getItem(window.AUTH_KEY)); } catch { return null; }
+  try { return JSON.parse(localStorage.getItem(AUTH_KEY)); } catch { return null; }
 }
 function setUser(user) {
-  localStorage.setItem(window.AUTH_KEY, JSON.stringify(user));
+  localStorage.setItem(AUTH_KEY, JSON.stringify(user));
 }
 function clearUser() {
-  localStorage.removeItem(window.AUTH_KEY);
+  localStorage.removeItem(AUTH_KEY);
 }
 function isLoggedIn() { return !!getUser(); }
 
@@ -115,7 +114,7 @@ document.addEventListener('click', e => {
 });
 
 // =================== TOAST ===================
-var toastTimer;
+let toastTimer;
 function showToast(msg, type = '') {
   const t = document.getElementById('toast');
   if (!t) return;
@@ -159,28 +158,21 @@ function statusLabel(s) {
 }
 
 function getBookEmoji(title) {
-  const t = title || '';
-  if (/数学|代数|微積|解析|線形/.test(t)) return '📐';
-  if (/物理|力学/.test(t))              return '⚛️';
-  if (/化学/.test(t))                   return '🧪';
-  if (/生物|生命/.test(t))              return '🧬';
-  if (/経済|会計|財務/.test(t))         return '📊';
-  if (/英語|言語|文学/.test(t))         return '📖';
-  if (/情報|コンピュータ|プログラム/.test(t)) return '💻';
-  if (/法律|法学/.test(t))              return '⚖️';
-  if (/医学|看護/.test(t))              return '🩺';
-  return '📚';
+  // 絵文字の代わりに書籍カテゴリのアイコン名を返す（Font Awesome）
+  return '<i class="fas fa-book" style="color:var(--navy);opacity:0.3;font-size:2.8rem;"></i>';
 }
 
 function createListingCard(item, showDelete = false) {
   const c   = conditionLabel(item.condition);
   const st  = statusLabel(item.status);
-  const img = getBookEmoji(item.title);
 
   const card = document.createElement('div');
   card.className = 'listing-card';
+  const imgContent = item.image_url
+    ? `<img src="${item.image_url}" alt="${escHtml(item.title)}" loading="lazy" />`
+    : `<i class="fas fa-book" style="color:var(--navy);opacity:0.25;font-size:2.8rem;"></i>`;
   card.innerHTML = `
-    <div class="card-img">${img}</div>
+    <div class="card-img">${imgContent}</div>
     <div class="card-body">
       <p class="card-title">${escHtml(item.title)}</p>
       <p class="card-subject"><i class="fas fa-graduation-cap" style="color:var(--primary-light);margin-right:4px;font-size:0.75rem;"></i>${escHtml(item.subject)}</p>
